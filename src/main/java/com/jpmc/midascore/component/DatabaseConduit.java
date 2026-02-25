@@ -22,24 +22,28 @@ public class DatabaseConduit {
         userRepository.save(userRecord);
     }
 
+    public UserRepository getUserRepository() {
+        return userRepository;
+    }
+
     @Transactional
-    public void process(Transaction transaction) {
+    public void process(Transaction transaction, float incentiveAmount) {
         UserRecord sender = userRepository.findById(transaction.getSenderId());
         UserRecord recipient = userRepository.findById(transaction.getRecipientId());
 
-        // Validation Rules
         if (sender != null && recipient != null && sender.getBalance() >= transaction.getAmount()) {
-            // 1. Deduct from sender
+            // 1. Deduct ONLY the transaction amount from the sender
             sender.setBalance(sender.getBalance() - transaction.getAmount());
-            // 2. Add to recipient
-            recipient.setBalance(recipient.getBalance() + transaction.getAmount());
+
+            // 2. Add transaction amount AND the incentive to the recipient
+            recipient.setBalance(recipient.getBalance() + transaction.getAmount() + incentiveAmount);
 
             // 3. Save updated users
             userRepository.save(sender);
             userRepository.save(recipient);
 
-            // 4. Record the transaction
-            TransactionRecord record = new TransactionRecord(sender, recipient, transaction.getAmount());
+            // 4. Record the transaction with the incentive
+            TransactionRecord record = new TransactionRecord(sender, recipient, transaction.getAmount(), incentiveAmount);
             transactionRecordRepository.save(record);
         }
     }

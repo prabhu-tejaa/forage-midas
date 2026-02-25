@@ -13,6 +13,10 @@ public class UserPopulator {
     @Autowired
     private DatabaseConduit databaseConduit;
 
+    public DatabaseConduit getDatabaseConduit() {
+        return databaseConduit;
+    }
+
     public void populate() {
         String[] userLines = fileLoader.loadStrings("/test_data/lkjhgfdsa.hjkl");
         for (String userLine : userLines) {

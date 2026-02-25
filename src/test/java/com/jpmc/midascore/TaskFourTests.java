@@ -30,17 +30,18 @@ public class TaskFourTests {
         for (String transactionLine : transactionLines) {
             kafkaProducer.send(transactionLine);
         }
+
+        // Wait for Kafka and the Incentives API to finish processing
         Thread.sleep(2000);
 
+        logger.info("----------------------------------------------------------");
+        logger.info("FINAL BALANCES:");
+
+        // This will print every user's balance to your console
+        userPopulator.getDatabaseConduit().getUserRepository().findAll().forEach(user -> {
+            logger.info("User: {} | Balance: {}", user.getName(), user.getBalance());
+        });
 
         logger.info("----------------------------------------------------------");
-        logger.info("----------------------------------------------------------");
-        logger.info("----------------------------------------------------------");
-        logger.info("use your debugger to find out what wilbur's balance is after all transactions are processed");
-        logger.info("kill this test once you find the answer");
-        while (true) {
-            Thread.sleep(20000);
-            logger.info("...");
-        }
     }
 }
