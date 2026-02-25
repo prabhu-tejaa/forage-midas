@@ -1,5 +1,6 @@
 package com.jpmc.midascore;
 
+import com.jpmc.midascore.repository.UserRepository; // Added this import
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,9 @@ public class TaskThreeTests {
     private UserPopulator userPopulator;
 
     @Autowired
+    private UserRepository userRepository; // Added this to make debugging easy
+
+    @Autowired
     private FileLoader fileLoader;
 
     @Test
@@ -32,15 +36,15 @@ public class TaskThreeTests {
         }
         Thread.sleep(2000);
 
-
         logger.info("----------------------------------------------------------");
         logger.info("----------------------------------------------------------");
         logger.info("----------------------------------------------------------");
         logger.info("use your debugger to find out what waldorf's balance is after all transactions are processed");
         logger.info("kill this test once you find the answer");
+
         while (true) {
             Thread.sleep(20000);
-            logger.info("...");
+            logger.info("..."); // <--- SET RED BREAKPOINT HERE
         }
     }
 }
